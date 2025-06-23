@@ -59,7 +59,34 @@ TEST(CalendarTest, AddSingleEvent) {
     return true;
 }
 
+TEST(CalendarTest, MultipleEventsCount) {
+    Calendar c;
+    c.addEvent(Event(1, 1, 2025, "New Year"));
+    c.addEvent(Event(14, 2, 2025, "Valentine's Day"));
+    c.addEvent(Event(25, 12, 2025, "Christmas"));
+    ASSERT_EQ(c.getEvents().size(), 3);
+    return true;
+}
+
+TEST(CalendarTest, EventMatchByDate) {
+    Calendar c;
+    c.addEvent(Event(10, 10, 2025, "Meeting"));
+    c.addEvent(Event(10, 10, 2025, "Conference"));
+    c.addEvent(Event(11, 10, 2025, "Workshop"));
+
+    int count = 0;
+    for (const auto &e : c.getEvents()) {
+        if (e.getDay() == 10 && e.getMonth() == 10 && e.getYear() == 2025)
+            count++;
+    }
+
+    ASSERT_EQ(count, 2);
+    return true;
+}
+
 int main() {
     RUN_TEST(CalendarTest, AddSingleEvent);
+    RUN_TEST(CalendarTest, MultipleEventsCount);
+    RUN_TEST(CalendarTest, EventMatchByDate);
     return 0;
 }
