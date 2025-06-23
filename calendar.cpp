@@ -84,9 +84,27 @@ TEST(CalendarTest, EventMatchByDate) {
     return true;
 }
 
+TEST(CalendarTest, EmptyCalendar) {
+    Calendar c;
+    ASSERT_EQ(c.getEvents().size(), 0);
+    return true;
+}
+
+TEST(CalendarTest, AddEventSameDayDifferentYear) {
+    Calendar c;
+    c.addEvent(Event(1, 5, 2024, "Event A"));
+    c.addEvent(Event(1, 5, 2025, "Event B"));
+    ASSERT_EQ(c.getEvents().size(), 2);
+    ASSERT_EQ(c.getEvents()[0].getYear(), 2024);
+    ASSERT_EQ(c.getEvents()[1].getYear(), 2025);
+    return true;
+}
+
 int main() {
     RUN_TEST(CalendarTest, AddSingleEvent);
     RUN_TEST(CalendarTest, MultipleEventsCount);
     RUN_TEST(CalendarTest, EventMatchByDate);
+    RUN_TEST(CalendarTest, EmptyCalendar);
+    RUN_TEST(CalendarTest, AddEventSameDayDifferentYear);
     return 0;
 }
