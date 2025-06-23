@@ -73,13 +73,11 @@ TEST(CalendarTest, EventMatchByDate) {
     c.addEvent(Event(10, 10, 2025, "Meeting"));
     c.addEvent(Event(10, 10, 2025, "Conference"));
     c.addEvent(Event(11, 10, 2025, "Workshop"));
-
     int count = 0;
     for (const auto &e : c.getEvents()) {
         if (e.getDay() == 10 && e.getMonth() == 10 && e.getYear() == 2025)
             count++;
     }
-
     ASSERT_EQ(count, 2);
     return true;
 }
@@ -100,11 +98,47 @@ TEST(CalendarTest, AddEventSameDayDifferentYear) {
     return true;
 }
 
+TEST(CalendarTest, AddLongDescriptionEvent) {
+    Calendar c;
+    std::string desc = "This is a very long event description meant to test storage and retrieval";
+    c.addEvent(Event(2, 8, 2025, desc));
+    ASSERT_EQ(c.getEvents().size(), 1);
+    ASSERT_EQ(c.getEvents()[0].getDescription(), desc);
+    return true;
+}
+
+TEST(CalendarTest, AddEventsSameDate) {
+    Calendar c;
+    c.addEvent(Event(15, 7, 2025, "Morning Briefing"));
+    c.addEvent(Event(15, 7, 2025, "Afternoon Workshop"));
+    c.addEvent(Event(15, 7, 2025, "Evening Networking"));
+    int count = 0;
+    for (const auto &e : c.getEvents()) {
+        if (e.getDay() == 15 && e.getMonth() == 7 && e.getYear() == 2025)
+            count++;
+    }
+    ASSERT_EQ(count, 3);
+    return true;
+}
+
+TEST(CalendarTest, CheckFirstAndLastEvent) {
+    Calendar c;
+    c.addEvent(Event(5, 3, 2025, "Start Project"));
+    c.addEvent(Event(10, 6, 2025, "Mid Review"));
+    c.addEvent(Event(20, 9, 2025, "Final Presentation"));
+    ASSERT_EQ(c.getEvents().front().getDescription(), "Start Project");
+    ASSERT_EQ(c.getEvents().back().getDescription(), "Final Presentation");
+    return true;
+}
+
 int main() {
     RUN_TEST(CalendarTest, AddSingleEvent);
     RUN_TEST(CalendarTest, MultipleEventsCount);
     RUN_TEST(CalendarTest, EventMatchByDate);
     RUN_TEST(CalendarTest, EmptyCalendar);
     RUN_TEST(CalendarTest, AddEventSameDayDifferentYear);
+    RUN_TEST(CalendarTest, AddLongDescriptionEvent);
+    RUN_TEST(CalendarTest, AddEventsSameDate);
+    RUN_TEST(CalendarTest, CheckFirstAndLastEvent);
     return 0;
 }
