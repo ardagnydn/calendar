@@ -4,17 +4,7 @@
 #include <cmath>
 #include "test1.h"
 
-class EventBase {
-public:
-    virtual int getDay() const = 0;
-    virtual int getMonth() const = 0;
-    virtual int getYear() const = 0;
-    virtual std::string getDescription() const = 0;
-    virtual void print() const = 0;
-    virtual ~EventBase() = default;
-};
-
-class GeneralEvent : public EventBase {
+class GeneralEvent {
     int day, month, year;
     std::string description;
 
@@ -22,25 +12,25 @@ public:
     GeneralEvent(int d, int m, int y, const std::string &desc)
         : day(d), month(m), year(y), description(desc) {}
 
-    int getDay() const override { return day; }
-    int getMonth() const override { return month; }
-    int getYear() const override { return year; }
-    std::string getDescription() const override { return description; }
+    int getDay() const { return day; }
+    int getMonth() const { return month; }
+    int getYear() const { return year; }
+    std::string getDescription() const { return description; }
 
-    void print() const override {
+    void print() const {
         std::cout << day << "/" << month << "/" << year << ": " << description << "\n";
     }
 };
 
 class Calendar {
-    std::vector<EventBase *> events;
+    std::vector<GeneralEvent *> events;
 
 public:
-    void addEvent(EventBase *e) {
+    void addEvent(GeneralEvent *e) {
         events.push_back(e);
     }
 
-    const std::vector<EventBase *> &getEvents() const {
+    const std::vector<GeneralEvent *> &getEvents() const {
         return events;
     }
 
